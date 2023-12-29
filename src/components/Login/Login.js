@@ -3,17 +3,29 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { auth } from '../../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { setUser } from '../../actions/userActions';
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      dispatch(
+        setUser({
+          name: user.displayName,
+          email: user.email,
+          age: null,
+          profilePhoto: null, 
+        })
+      );
+      navigate('/profile');
     } catch (error) {
       console.error('Error signing in:', error.message);
     }

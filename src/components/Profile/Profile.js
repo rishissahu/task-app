@@ -6,6 +6,8 @@ import { signOut } from 'firebase/auth';
 const Profile = () => {
     const user = useSelector((state) => state.user);
 
+    console.log(useSelector((state) => state))
+
     const dispatch = useDispatch();
 
     const handleLogout = async () => {
