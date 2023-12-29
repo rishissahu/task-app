@@ -1,10 +1,10 @@
-// Login.js
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { auth } from '../../firebaseConfig';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth, firestore } from '../../firebaseConfig';
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { setUser } from '../../actions/userActions';
 import { useNavigate } from 'react-router-dom';
+import { collection, doc, getDoc } from 'firebase/firestore';
 
 
 const Login = () => {
@@ -17,15 +17,24 @@ const Login = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      dispatch(
-        setUser({
-          name: user.displayName,
-          email: user.email,
-          age: null,
-          profilePhoto: null, 
-        })
-      );
-      navigate('/profile');
+
+      const userDocRef = doc(collection(firestore, 'users'), user.uid);
+      const userDocSnapshot = await getDoc(userDocRef);
+      if (userDocSnapshot.exists()) {
+        const userData = userDocSnapshot.data();
+
+        dispatch(
+          setUser({
+            name: userData.name,
+            email: userData.email,
+            age: userData.age,
+            profilePhoto: userData.profilePhoto,
+          })
+        );
+        navigate('/profile');
+      } else {
+        console.error('User data not found in Firestore.');
+      }
     } catch (error) {
       console.error('Error signing in:', error.message);
     }

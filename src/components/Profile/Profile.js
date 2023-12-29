@@ -2,9 +2,13 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { auth } from '../../firebaseConfig';
 import { signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import { clearUser, setUser } from '../../actions/userActions';
+
 
 const Profile = () => {
     const user = useSelector((state) => state.user);
+    const navigate = useNavigate();
 
     console.log(useSelector((state) => state))
 
@@ -13,6 +17,8 @@ const Profile = () => {
     const handleLogout = async () => {
         try {
             await signOut(auth);
+            dispatch(clearUser());
+            navigate('/login')
         } catch (error) {
             console.error('Error signing out:', error.message);
         }
