@@ -4,7 +4,6 @@ import {
   Route,
   Routes,
   Link,
-  useNavigate,
   useParams,
 } from "react-router-dom";
 import Login from "./components/Login/Login";
@@ -32,15 +31,21 @@ const App = () => {
       <div>
         <nav>
           <ul>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/signup">Sign Up</Link>
-            </li>
-            <li>
-              <Link to="/profile">Profile</Link>
-            </li>
+            {!user?.uid && (
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+            )}
+            {!user?.uid && (
+              <li>
+                <Link to="/signup">Sign Up</Link>
+              </li>
+            )}
+            {user?.uid && (
+              <li>
+                <Link to="/profile">Profile</Link>
+              </li>
+            )}
           </ul>
         </nav>
 

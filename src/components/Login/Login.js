@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { auth, firestore } from "../../firebaseConfig";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { setUser } from "../../actions/userActions";
-import { useNavigate, useParams, useRoutes } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { collection, doc, getDoc } from "firebase/firestore";
 
 const Login = () => {
@@ -47,7 +47,7 @@ const Login = () => {
     if (userData?.uid) {
       navigate("/profile");
     }
-  }, []);
+  }, [userData]);
   return (
     <div>
       <h2>Login</h2>
